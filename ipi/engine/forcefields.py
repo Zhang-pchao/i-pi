@@ -1006,7 +1006,10 @@ class FFPlumed(FFEval):
             )
 
         v = 0.0
-        f = np.zeros((self.natoms, 3))
+        # PLUMED retains this pointer through the subsequent metadynamics update.
+        # flatten() below returns a copy, so the request result does not own it.
+        self.force_buffer = np.zeros((self.natoms, 3))
+        f = self.force_buffer
         vir = np.zeros((3, 3))
 
         self.lastq[:] = r["pos"]
@@ -1084,7 +1087,9 @@ class FFPlumed(FFEval):
                 "triggering a full PLUMED update.",
                 verbosity.medium,
             )
-            request = {"pos": dstrip(pos), "cell": (dstrip(cell), None), "result": None}
+            request = ForceRequest(
+                {"pos": dstrip(pos), "cell": (dstrip(cell), None), "result": None}
+            )
             self.evaluate(request)
 
         if self.compute_work:
