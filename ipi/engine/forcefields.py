@@ -1051,7 +1051,8 @@ class FFPlumed(FFEval):
         if self.system_force is not None:
             # plumed increments the value of the force, here we need only the correction term
             f[:] -= dstrip(self.system_force.f).flatten()
-            vir[:] -= -dstrip(self.system_force.vir)
+            # The tensor is already back in the i-PI sign convention.
+            vir[:] -= dstrip(self.system_force.vir)
 
         extras = {"raw": ""}
         for x in self.plumed_data:
