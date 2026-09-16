@@ -38,10 +38,7 @@ def print_xyz_high_precision_path(
     """Print every bead as an XYZ frame with round-trip double precision."""
 
     a, b, c, alpha, beta, gamma = mt.h2abc_deg(cell.h * cell_conv)
-    header = (
-        "%d\n# bead: %d CELL(abcABC): %.16e %.16e %.16e "
-        "%.16e %.16e %.16e %s\n"
-    )
+    header = "%d\n# bead: %d CELL(abcABC): %.16e %.16e %.16e " "%.16e %.16e %.16e %s\n"
     coordinates = dstrip(beads.q) * atoms_conv
     names = dstrip(beads.names)
     for bead in range(beads.nbeads):
@@ -69,9 +66,5 @@ def print_xyz_high_precision(
 
     a, b, c, alpha, beta, gamma = mt.h2abc_deg(cell.h * cell_conv)
     header = "%d\n# CELL(abcABC): %.16e %.16e %.16e %.16e %.16e %.16e %s\n"
-    filedesc.write(
-        header % (atoms.natoms, a, b, c, alpha, beta, gamma, title)
-    )
-    _write_atoms(
-        dstrip(atoms.names), dstrip(atoms.q) * atoms_conv, filedesc
-    )
+    filedesc.write(header % (atoms.natoms, a, b, c, alpha, beta, gamma, title))
+    _write_atoms(dstrip(atoms.names), dstrip(atoms.q) * atoms_conv, filedesc)
